@@ -1,3 +1,9 @@
+using Pkg
+pkg"activate .."
+pkg"instantiate"
+pkg"precompile"
+
+
 import Base.Filesystem.joinpath
 import Base.Filesystem.isdir
 import Base.Filesystem.mkpath
