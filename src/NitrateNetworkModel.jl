@@ -21,7 +21,4 @@ include("flow_regime.jl")
 export FlowRegime, FlowRegimeSimResults, evaluate_with_flow_regime,
        weighted_avg_nconc, weighted_outlet_nconc
 
-include("main.jl")
-export WatershedSimModel, WatershedSimActions, evaluate!
-
 end # module
