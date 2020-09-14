@@ -16,6 +16,12 @@ function main()
     )
     evaluate!(streammodel)
     save_model_results(streammodel, resultpath("base_results.csv"))
+
+    flowregime = FlowRegime(inputpath("flow_values.csv"))
+    results = evaluate!(streammodel, flowregime)
+    @show weighted_avg_nconc(results)
+    @show weighted_outlet_nconc(results)
+
 end
 
 
