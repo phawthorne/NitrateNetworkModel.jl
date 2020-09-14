@@ -18,7 +18,7 @@ export load_data_from_dir, load_model_from_matlab_dump,
        build_network, load_from_tables
 
 include("flow_regime.jl")
-export FlowRegime, FlowRegimeSimResults, evaluate_with_flow_regime,
+export FlowRegime, FlowRegimeSimResults, evaluate!,
        weighted_avg_nconc, weighted_outlet_nconc
 
 end # module

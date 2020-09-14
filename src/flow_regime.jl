@@ -54,13 +54,13 @@ end
 
 
 """
-    evaluate_with_flow_regime(model::StreamModel, flowregime::FlowRegime)
+    evaluate!(model::StreamModel, flowregime::FlowRegime)
 
 Runs `stream_model.evaluate!(model, q)` for each q in `flowregime.q_gage.` Outlet
 and average concentrations are saved to a `FlowRegimeSimResults` struct and
 returned.
 """
-function evaluate_with_flow_regime(model::StreamModel, flowregime::FlowRegime)
+function evaluate!(model::StreamModel, flowregime::FlowRegime)
     nqvals = length(flowregime.q_gage)
     results = FlowRegimeSimResults(
         fill(0.0, nqvals),
