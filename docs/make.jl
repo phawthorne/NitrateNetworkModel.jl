@@ -6,8 +6,7 @@ makedocs(
     sitename = "WatershedSim.jl",
     pages = [
         "Home" => "index.md",
-        "Models" => ["landscape.md",
-                     "stream_model.md",
+        "Models" => ["stream_model.md",
                      "flow_regime.md"]
     ]
 )
