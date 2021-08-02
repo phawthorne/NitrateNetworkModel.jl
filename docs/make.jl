@@ -15,5 +15,5 @@ makedocs(
 
 deploydocs(
     repo = "github.com/phawthorne/NitrateNetworkModel.jl.git",
-    devbrach = "main"
+    devbranch = "main"
 )
