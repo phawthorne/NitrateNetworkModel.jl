@@ -8,8 +8,8 @@ makedocs(
     sitename = "NitrateNetworkModel.jl",
     pages = [
         "Home" => "index.md",
-        "Models" => ["nnm.md",
-                     "flow_regime.md"]
+        "Basic Model" => "nnm.md",
+        "Flow Regime" => "flow_regime.md"
     ]
 )
 

@@ -9,15 +9,15 @@ resultpath(basename) = joinpath(workspace, "results", basename)
 
 
 function main()
-    streammodel = StreamModel(
+    sm = StreamModel(
         inputpath("base_params.csv"), 
         inputpath("network_table.csv")
     )
-    evaluate!(streammodel)
-    save_model_results(streammodel, resultpath("base_results.csv"))
+    evaluate!(sm)
+    save_model_results(sm, resultpath("base_results.csv"))
 
     flowregime = FlowRegime(inputpath("flow_values.csv"))
-    results = evaluate!(streammodel, flowregime)
+    results = evaluate!(sm, flowregime)
     @show weighted_avg_nconc(results)
     @show weighted_outlet_nconc(results)
 

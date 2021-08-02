@@ -9,10 +9,10 @@ Basic usage requires two files, one that defines model parameters and another th
 ```julia
 using NitrateNetworkModel
 
-streammodel = StreamModel(
+sm = StreamModel(
     "../data/base_params.csv", 
     "../data/network_table.csv"
 )
-evaluate!(streammodel)
-save_model_results(streammodel, "../results/base_results.csv")
+evaluate!(sm)
+save_model_results(sm, "../results/base_results.csv")
 ```

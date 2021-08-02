@@ -1,5 +1,5 @@
 """
-    load_from_tables(baseparams_file::String, network_file::String)
+    StreamModel(baseparams_file::String, network_file::String)
 
 Constructs a [`StreamModel`](@ref) based on inputs in two csv files. The files
 should be structured as follows:
@@ -7,7 +7,7 @@ should be structured as follows:
 * baseparams_file: columns "variable" and "value".
 * network_file: many more columns.
 """
-function load_from_tables(baseparams_file::String, network_file::String)
+function StreamModel(baseparams_file::String, network_file::String)
     basedf = DataFrame(CSV.File(baseparams_file))
     varcol = columnindex(basedf, :variable)
     valcol = columnindex(basedf, :value)

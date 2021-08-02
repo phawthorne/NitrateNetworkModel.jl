@@ -6,7 +6,6 @@
 StreamModel
 StreamModel(::String, ::String)
 evaluate!(::StreamModel)
-load_from_tables
 save_model_results
 ```
 

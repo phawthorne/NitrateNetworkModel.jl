@@ -87,16 +87,6 @@ constructor [`StreamModel(::String, ::String)`](@ref).
     mv::ModelVariables
 end
 
-"""
-    StreamModel(baseparams_file::String, network_file::String)
-
-StreamModel constructor from files. See [`load_from_tables`](@ref) for specific
-file formats. All this constructor does is call that function.
-"""
-function StreamModel(baseparams_file::String, network_file::String)
-    load_from_tables(baseparams_file, network_file)
-end
-
 
 """
     evaluate!(model::StreamModel; qgage::Float64, contrib_n_load_reduction::Union{nothing,Array{Float64,1}})

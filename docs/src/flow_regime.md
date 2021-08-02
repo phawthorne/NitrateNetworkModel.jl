@@ -28,16 +28,16 @@ network_file = "../data/network_table.csv"
 flowfile = "../data/flow_values.csv"
 
 # create the model structs
-model = StreamModel(baseparams_file, network_file)
-flowregime = FlowRegime(flowfile)
+sm = StreamModel(baseparams_file, network_file)
+fr = FlowRegime(flowfile)
 
 # run the model
-results = evaluate!(model, flowregime)
+results = evaluate!(sm, fr)
 
 # create a summary figure
-plot(flowregime.p_exceed, results.n_conc_outlet,
+plot(fr.p_exceed, results.n_conc_outlet,
     label=@sprintf "Outlet (overall: %.2f)" weighted_outlet_nconc(results))
-plot!(flowregime.p_exceed, results.n_conc_avg,
+plot!(fr.p_exceed, results.n_conc_avg,
     label=@sprintf "Average (overall: %.2f)" weighted_avg_nconc(results))
 xaxis!("Probability Exceedance")
 yaxis!("Nitrate Concentration")
