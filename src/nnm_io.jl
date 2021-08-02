@@ -8,7 +8,7 @@ should be structured as follows:
 * network_file: many more columns.
 """
 function load_from_tables(baseparams_file::String, network_file::String)
-    basedf = DataFrame!(CSV.File(baseparams_file))
+    basedf = DataFrame(CSV.File(baseparams_file))
     varcol = columnindex(basedf, :variable)
     valcol = columnindex(basedf, :value)
     value(var) = basedf[findfirst(x->x==var, basedf[!, varcol]), valcol]
@@ -26,7 +26,7 @@ function load_from_tables(baseparams_file::String, network_file::String)
         Jleach = value("Jleach")
     )
 
-    netdf = DataFrame!(CSV.File(network_file))
+    netdf = DataFrame(CSV.File(network_file))
     n_links = Int64(value("n_links"))
 
     routing_depth = netdf.routing_depth

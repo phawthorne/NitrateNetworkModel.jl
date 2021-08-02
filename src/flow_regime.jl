@@ -39,7 +39,7 @@ end
 Constructor function to build FlowRegime from csv file.
 """
 function FlowRegime(flowfile::String; q_gage_col=:Q, p_exceed_col=:cp, p_mass_col=:cf)
-    flowdf = DataFrame!(CSV.File(flowfile))
+    flowdf = DataFrame(CSV.File(flowfile))
     return FlowRegime(
         deepcopy(flowdf[!, columnindex(flowdf, q_gage_col)]),
         deepcopy(flowdf[!, columnindex(flowdf, p_exceed_col)]),
