@@ -1,7 +1,6 @@
 # NitrateNetworkModel.jl
 
 [![](https://img.shields.io/badge/docs-stable-blue.svg)](https://phawthorne.github.io/NitrateNetworkModel.jl/stable)
-[![](https://img.shields.io/badge/docs-dev-blue.svg)](https://phawthorne.github.io/NitrateNetworkModel.jl/dev)
 
 Implementation of network-based model of in-stream nitrate and carbon dynamics described in [Czuba, et al. (2018)](https://doi.org/10.1002/2017WR021859)
 
