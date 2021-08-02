@@ -1,3 +1,8 @@
+using CSV
+using DataFrames
+using DelimitedFiles
+using Parameters
+
 module NitrateNetworkModel
 
 include("link_network.jl")

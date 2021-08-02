@@ -1,8 +1,3 @@
-using CSV
-using DataFrames
-using DelimitedFiles
-using Parameters
-
 """
     FlowRegime(
         q_gage::Vector{Float64},
@@ -95,4 +90,22 @@ Convenience function for getting probability exceedance weighted average concent
 """
 function weighted_avg_nconc(results::FlowRegimeSimResults)
     return sum(results.n_conc_avg .* results.p_mass)
+end
+
+
+"""
+    full_eval_flow_regime(model::StreamModel, flowregime::FlowRegime)
+
+Run `stream_model.evaluate!(model, q)` for each q in `flowregime.q_gage`.
+Save averaged link values for values in `ModelVariables`.
+"""
+function full_eval_flow_regime(model::StreamModel, flowregime::FlowRegime)
+    results = init_model_vars(model.nc.n_links)
+
+    for (q, p) in zip(flowregime.q_gage, flowregime.p_mass)
+        evaluate!(model, qgage=q)
+        results = results + (p * model.mv)
+    end
+    
+    return results
 end
