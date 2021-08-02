@@ -12,3 +12,7 @@ makedocs(
                      "flow_regime.md"]
     ]
 )
+
+deploydocs(
+    repo = "github.com/phawthorne/NitrateNetworkModel.jl.git"
+)
