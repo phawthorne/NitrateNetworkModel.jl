@@ -1,12 +1,11 @@
 using Pkg
 Pkg.activate("..")
-
 using NitrateNetworkModel
 
 
 workspace = "../data/LeSueur"
-inputs_dir = joinpath(workspace, "inputs")
-results_dir = joinpath(workspace, "results")
+inputpath(basename) = joinpath(workspace, "inputs", "LeSueurNetworkData", basename)
+resultpath(basename) = joinpath(workspace, "results", basename)
 
 
 function main()
@@ -24,8 +23,5 @@ function main()
 
 end
 
-
-inputpath(basename) = joinpath(inputs_dir, "LeSueurNetworkData", basename)
-resultpath(basename) = joinpath(results_dir, basename)
 
 main()

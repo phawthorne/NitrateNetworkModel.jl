@@ -1,8 +1,7 @@
-# Stream Model
-This is an implementation of NNM. It is contained in stream\_model.jl and
-stream\_model\_io.jl.
+# Nitrate Network Model
 
-### Function documentation
+## Function documentation
+
 ```@docs
 StreamModel
 StreamModel(::String, ::String)
@@ -11,8 +10,10 @@ load_from_tables
 save_model_results
 ```
 
-### Results access
+## Results access
+
 These functions give ways of extracting key results from the model structure.
+
 ```@docs
 get_outlet_nconc
 get_avg_nconc

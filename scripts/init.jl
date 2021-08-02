@@ -1,7 +1,7 @@
 using Pkg
-pkg"activate .."
-pkg"instantiate"
-pkg"precompile"
+Pkg.activate("..")
+Pkg.instantiate()
+Pkg.precompile()
 
 import Base.Filesystem.joinpath
 import Base.Filesystem.isdir

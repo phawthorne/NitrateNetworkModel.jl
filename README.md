@@ -3,6 +3,7 @@
 Implementation of network-based model of in-stream nitrate and carbon dynamics described in [Czuba, et al. (2018)](https://doi.org/10.1002/2017WR021859)
 
 ## Usage
+
 The basic simulation of the LeSueur basin can be run with these commands:
 
 ```bash

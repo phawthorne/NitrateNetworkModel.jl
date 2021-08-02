@@ -1,12 +1,14 @@
-using Documenter, WatershedSim
+using Documenter, NitrateNetworkModel
+
 push!(LOAD_PATH, "../src/")
+
 makedocs(
     format = Documenter.HTML(prettyurls = false),
-    modules = [WatershedSim],
-    sitename = "WatershedSim.jl",
+    modules = [NitrateNetworkModel],
+    sitename = "NitrateNetworkModel.jl",
     pages = [
         "Home" => "index.md",
-        "Models" => ["stream_model.md",
+        "Models" => ["nnm.md",
                      "flow_regime.md"]
     ]
 )
