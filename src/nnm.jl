@@ -1,5 +1,3 @@
-using Parameters
-
 @with_kw struct ModelConstants
     a1::Float64
     a2::Float64
@@ -101,7 +99,7 @@ end
 
 
 """
-    evaluate!(model::StreamModel; qgage::Float64)
+    evaluate!(model::StreamModel; qgage::Float64, contrib_n_load_reduction::Union{nothing,Array{Float64,1}})
 
 Main model function. Assumes that `model.nc` has already been updated to
 reflect the desired management scenario, e.g. updates to
@@ -112,12 +110,13 @@ If a value for qgage is provided, the model will be run using that value as
 the flow measured at the link `model.nc.gage_link`, which is used to assign
 flow values to all other links. Otherwise, the model will be run using
 `model.nc.gage_flow`.
+
 #TODO: the reason I'm doing it this way is because the nc struct is currently
 immutable. I could switch it to mutable, but I've been avoiding that due to
 potential performance regressions. I should test that, since this is introduces
 a funny assymetry in how different model parameters are handled. 
 """
-function evaluate!(model::StreamModel; qgage::Float64=NaN)
+function evaluate!(model::StreamModel; qgage::Float64=NaN, contrib_n_load_reduction=nothing)
     reset_model_vars!(model)
     if isnan(qgage)
         assign_qQ!(model, model.nc.gage_flow)
@@ -126,7 +125,7 @@ function evaluate!(model::StreamModel; qgage::Float64=NaN)
     end
     assign_B!(model)
     determine_U_H_wetland_hydraulics!(model)
-    compute_N_C_conc!(model)
+    compute_N_C_conc!(model; contrib_n_load_reduction=contrib_n_load_reduction)
 end
 
 
@@ -283,7 +282,7 @@ end
 
 Routes N and C, computes denitrification.
 """
-function compute_N_C_conc!(model::StreamModel)
+function compute_N_C_conc!(model::StreamModel; contrib_n_load_reduction=nothing)
     @unpack agN, agC, agCN, Jleach = model.mc
     @unpack q, Q_in, Q_out, B, N_conc_ri, N_conc_us, N_conc_ds, N_conc_in,
         C_conc_ri, C_conc_ds, C_conc_us, C_conc_in, cn_rat, jden,
@@ -291,13 +290,20 @@ function compute_N_C_conc!(model::StreamModel)
     @unpack link_len, routing_order, to_node, outlet_link,
         fainN, fainC, wetland_area, pEM, contrib_n_load_factor = model.nc
 
+
+    if contrib_n_load_reduction === nothing
+        contrib_n_load = contrib_n_load_factor
+    else
+        contrib_n_load = contrib_n_load_reduction .* contrib_n_load_factor
+    end
+    
     for l in routing_order
         # bookkeeping
         N_conc_us[l] = mass_N_in[l] / Q_in[l]
         C_conc_us[l] = mass_C_in[l] / Q_in[l]
 
         # add input from contributing areas
-        N_conc_ri[l] = agN * fainN[l] * contrib_n_load_factor[l]
+        N_conc_ri[l] = agN * fainN[l] * contrib_n_load[l]
         C_conc_ri[l] = agC * fainC[l] + agCN * fainN[l]
 
         # After adding local, we have the final incoming mass. Everything

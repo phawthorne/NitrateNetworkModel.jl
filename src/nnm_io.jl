@@ -1,9 +1,3 @@
-using DelimitedFiles
-using Parameters
-using FileIO
-using DataFrames
-using CSV
-
 """
     load_from_tables(baseparams_file::String, network_file::String)
 
@@ -176,29 +170,60 @@ function save_model_results(model::StreamModel, filename::String)
     @unpack mv, mc, nc = model
 
     df = DataFrame()
-    df[:link] = 1:nc.n_links
-    df[:feature] = nc.feature
-    df[:q] = mv.q
-    df[:Q_in] = mv.Q_in
-    df[:Q_out] = mv.Q_out
-    df[:B] = mv.B
-    df[:H] = mv.H
-    df[:U] = mv.U
-    df[:Jden] = mv.jden
-    df[:cnrat] = mv.cn_rat
-    df[:N_conc_ri] = mv.N_conc_ri
-    df[:N_conc_us] = mv.N_conc_us
-    df[:N_conc_ds] = mv.N_conc_ds
-    df[:N_conc_in] = mv.N_conc_in
-    df[:C_conc_ri] = mv.C_conc_ri
-    df[:C_conc_us] = mv.C_conc_us
-    df[:C_conc_ds] = mv.C_conc_ds
-    df[:C_conc_in] = mv.C_conc_in
-    df[:mass_N_out] = mv.mass_N_out
-    df[:mass_C_out] = mv.mass_C_out
+    df[!, :link] = 1:nc.n_links
+    df[!, :feature] = nc.feature
+    df[!, :q] = mv.q
+    df[!, :Q_in] = mv.Q_in
+    df[!, :Q_out] = mv.Q_out
+    df[!, :B] = mv.B
+    df[!, :H] = mv.H
+    df[!, :U] = mv.U
+    df[!, :Jden] = mv.jden
+    df[!, :cnrat] = mv.cn_rat
+    df[!, :N_conc_ri] = mv.N_conc_ri
+    df[!, :N_conc_us] = mv.N_conc_us
+    df[!, :N_conc_ds] = mv.N_conc_ds
+    df[!, :N_conc_in] = mv.N_conc_in
+    df[!, :C_conc_ri] = mv.C_conc_ri
+    df[!, :C_conc_us] = mv.C_conc_us
+    df[!, :C_conc_ds] = mv.C_conc_ds
+    df[!, :C_conc_in] = mv.C_conc_in
+    df[!, :mass_N_out] = mv.mass_N_out
+    df[!, :mass_C_out] = mv.mass_C_out
     ldr, lef = get_delivery_ratios(model)
-    df[:link_DR] = ldr
-    df[:link_EF] = lef
+    df[!, :link_DR] = ldr
+    df[!, :link_EF] = lef
+
+    CSV.write(filename, df)
+end
+
+
+"""
+    save_model_variables(mv::ModelVariables, filename::String)
+
+Write a ModelVariables struct to a table
+"""
+function save_model_variables(mv::ModelVariables, filename::String)
+    df = DataFrame()
+    df[!, :link] = 1:length(mv.q)
+    df[!, :q] = mv.q
+    df[!, :Q_in] = mv.Q_in
+    df[!, :Q_out] = mv.Q_out
+    df[!, :B] = mv.B
+    df[!, :H] = mv.H
+    df[!, :U] = mv.U
+    df[!, :Jden] = mv.jden
+    df[!, :cnrat] = mv.cn_rat
+    df[!, :N_conc_ri] = mv.N_conc_ri
+    df[!, :N_conc_us] = mv.N_conc_us
+    df[!, :N_conc_ds] = mv.N_conc_ds
+    df[!, :N_conc_in] = mv.N_conc_in
+    df[!, :C_conc_ri] = mv.C_conc_ri
+    df[!, :C_conc_us] = mv.C_conc_us
+    df[!, :C_conc_ds] = mv.C_conc_ds
+    df[!, :C_conc_in] = mv.C_conc_in
+    df[!, :mass_N_out] = mv.mass_N_out
+    df[!, :mass_C_out] = mv.mass_C_out
 
     CSV.write(filename, df)
 end
