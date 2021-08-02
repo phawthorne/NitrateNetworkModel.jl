@@ -128,7 +128,7 @@ function build_network(d::Dict{String, Any})
     to_node = convert(Vector{Int64}, to_node)
 
     # routing order
-    ln = make_network(to_node)
+    ln = LinkNetwork(to_node)
     routing_order = get_routing_order(ln, outlet_link)
     hw_links = get_headwater_links(ln)
 

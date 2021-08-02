@@ -6,7 +6,7 @@ using Parameters
 module NitrateNetworkModel
 
 include("link_network.jl")
-export LinkNetwork, make_network, calc_routing_depth, get_routing_order,
+export LinkNetwork, calc_routing_depth, get_routing_order,
        get_headwater_links
 
 include("stream_model.jl")

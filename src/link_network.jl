@@ -1,15 +1,30 @@
 """
     LinkNetwork(up, down)
-A link network consists of up
+
+`LinkNetwork` consists of two dictionaries, `up` and `down`, which indicate, respectively,
+the links flowing into given link (`up[i]`), and the link it flows into (`down[i]`).
+In both cases, the value is an array of link indices. An empty `down` list indicates that `i`
+flow out of the network (i.e. `i` is the outlet), and an empty `up` list indicates that `i`
+is a headwater.
 """
-struct LinkNetwork
-    up::Dict{Int64, Array{Int64, 1}}
-    down::Dict{Int64, Array{Int64, 1}}
+struct LinkNetwork{T<:Integer}
+    up::Dict{T, Array{T, 1}}
+    down::Dict{T, Array{T, 1}}
 end
 
-function make_network(connection_list)
-    up = Dict{Int64, Array{Int64, 1}}()
-    down = Dict{Int64, Array{Int64, 1}}()
+
+"""
+    LinkNetwork(connection_list::Array{T, 1} where T<:Integer)
+
+`connection_list` defines downstream connections: `connection_list[i] == j` means that link `i`
+flows into link `j`. If `connection_list[i] == -1`, that means `i` is the outlet.
+
+Return a `LinkNetwork`
+"""
+function LinkNetwork(connection_list::Array{T, 1} where T<:Integer)
+    T = typeof(connection_list[1])
+    up = Dict{T, Array{T, 1}}()
+    down = Dict{T, Array{T, 1}}()
 
     n_nodes = length(connection_list)
     for n in 1:n_nodes
