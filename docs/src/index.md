@@ -1,4 +1,4 @@
-# Documentation for WatershedSim
+# Documentation for NitrateNetworkModel
 
 This module implements the Nitrate Network Model described in [Czuba, et al. (2018)](https://doi.org/10.1002/2017WR021859).
 

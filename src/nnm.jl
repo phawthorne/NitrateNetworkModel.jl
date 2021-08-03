@@ -76,7 +76,7 @@ change during the run. `NetworkConstants` holds the specification of the
 links, their characteristics, and nitrate concentrations from the landscape.
 It will not change during the run, but is expected to be adapted for each
 management scenario. Finally, `ModelVariables` holds the values that are
-calculated during the model run. All `WatershedSim` functions will take the
+calculated during the model run. All `NitrateNetworkModel` functions will take the
 entire `StreamModel` as an argument, so there is no need to pull out the
 component structures. It is also expected that users will use the file-based
 constructor [`StreamModel(::String, ::String)`](@ref).
