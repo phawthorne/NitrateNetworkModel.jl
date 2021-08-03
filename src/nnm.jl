@@ -104,7 +104,7 @@ flow values to all other links. Otherwise, the model will be run using
 #TODO: the reason I'm doing it this way is because the nc struct is currently
 immutable. I could switch it to mutable, but I've been avoiding that due to
 potential performance regressions. I should test that, since this is introduces
-a funny assymetry in how different model parameters are handled. 
+a funny asymmetry in how different model parameters are handled. 
 """
 function evaluate!(model::StreamModel; qgage::Float64=NaN, contrib_n_load_reduction=nothing)
     reset_model_vars!(model)

@@ -22,7 +22,7 @@ end
         p_mass::Vector{Float64}
     )
 
-Results structure returned by `evaluate_with_flow_regime`. Contains outlet
+Results structure returned by `evaluate!`. Contains outlet
 and average nitrate concentration values for each of the flow values in
 `flowregime.q_gage`. `flowregime.p_mass` is copied over for convenience.
 """
