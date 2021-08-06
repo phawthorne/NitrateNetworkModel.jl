@@ -10,11 +10,15 @@ include("link_network.jl")
 export LinkNetwork, calc_routing_depth, get_routing_order,
        get_headwater_links
 
+include("StreamModels.jl")
+export StreamModel, ModelConstants, NetworkConstants, ModelVariables
+
 include("nnm.jl")
 include("nnm_io.jl")
 export ModelConstants, NetworkConstants, ModelVariables,
        StreamModel, evaluate!,
-       get_outlet_nconc, get_avg_nconc, get_delivery_ratios,
+       get_outlet_nconc, get_avg_nconc, get_average_nconc,
+       get_delivery_ratios,
        reset_model_vars!
 export load_data_from_dir, load_model_from_matlab_dump,
        save_constants, load_constants, save_model_results,
