@@ -67,11 +67,11 @@ function read_baseparams(baseparams_file::String)
     elseif fileext == ".csv"
         baseparams = Dict{Any, Any}()
         lines = readlines(open(baseparams_file))
-        for l in lines
+        for l in lines[2:end]  #TODO: this is skipping the header but should be smarter
             key, val = split(l, ',')
-            baseparams[key] = val
+            baseparams[key] = parse(Float64, val)
         end
-        return baseparams_file
+        return baseparams
     else
         return nothing
     end
