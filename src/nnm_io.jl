@@ -8,26 +8,23 @@ should be structured as follows:
 * network_file: many more columns.
 """
 function StreamModel(baseparams_file::String, network_file::String)
-    basedf = DataFrame(CSV.File(baseparams_file))
-    varcol = columnindex(basedf, :variable)
-    valcol = columnindex(basedf, :value)
-    value(var) = basedf[findfirst(x->x==var, basedf[!, varcol]), valcol]
+    baseparams = read_baseparams(baseparams_file)
     mc = ModelConstants(
-        a1 = value("a1"),
-        a2 = value("a2"),
-        b1 = value("b1"),
-        b2 = value("b2"),
-        Qbf = value("Qbf"),
-        agN = value("agN"),
-        agC = value("agC"),
-        agCN = value("agCN"),
-        g = value("g"),
-        n = value("n"),
-        Jleach = value("Jleach")
+        a1 = baseparams["a1"],
+        a2 = baseparams["a2"],
+        b1 = baseparams["b1"],
+        b2 = baseparams["b2"],
+        Qbf = baseparams["Qbf"],
+        agN = baseparams["agN"],
+        agC = baseparams["agC"],
+        agCN = baseparams["agCN"],
+        g = baseparams["g"],
+        n = baseparams["n"],
+        Jleach = baseparams["Jleach"]
     )
 
     netdf = DataFrame(CSV.File(network_file))
-    n_links = Int64(value("n_links"))
+    n_links = Int64(baseparams["n_links"])
 
     routing_depth = netdf.routing_depth
     routing_order = sort!(collect(1:n_links), by=x->(routing_depth[x],n_links-x), rev=true)
@@ -36,9 +33,9 @@ function StreamModel(baseparams_file::String, network_file::String)
 
     nc = NetworkConstants(
         n_links = n_links,
-        outlet_link = value("outlet_link"),
-        gage_link = value("gage_link"),
-        gage_flow = value("gage_flow"),
+        outlet_link = baseparams["outlet_link"],
+        gage_link = baseparams["gage_link"],
+        gage_flow = baseparams["gage_flow"],
         feature = netdf.feature,
         to_node = netdf.to_node,
         us_area = netdf.us_area,
@@ -59,6 +56,25 @@ function StreamModel(baseparams_file::String, network_file::String)
 
     StreamModel(mc, nc, mv)
 
+end
+
+
+"Load either a YAML or CSV (legacy) baseparams file to a Dict"
+function read_baseparams(baseparams_file::String)
+    fileext = Base.Filesystem.splitext(baseparams_file)[2]
+    if fileext == ".yml" || fileext == ".yaml"
+        return YAML.load_file(baseparams_file)
+    elseif fileext == ".csv"
+        baseparams = Dict{Any, Any}()
+        lines = readlines(open(baseparams_file))
+        for l in lines
+            key, val = split(l, ',')
+            baseparams[key] = val
+        end
+        return baseparams_file
+    else
+        return nothing
+    end
 end
 
 
