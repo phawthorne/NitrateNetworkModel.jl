@@ -72,7 +72,6 @@ function assign_qQ!(model::StreamModel, q_gage::Float64)
     @unpack us_area, contrib_area, routing_order, to_node,
             gage_link, outlet_link = model.nc
 
-    # TODO: this seems like an oversimplification - verify with Jon/MATLAB code
     contrib_q_per_area = q_gage / us_area[gage_link]
 
     for l in routing_order[1:end-1]
@@ -80,6 +79,7 @@ function assign_qQ!(model::StreamModel, q_gage::Float64)
         Q_out[l] = q[l] + Q_in[l]
         Q_in[to_node[l]] += Q_out[l]
     end
+    q[outlet_link] = contrib_q_per_area * contrib_area[outlet_link]
     Q_out[outlet_link] = q[outlet_link] + Q_in[outlet_link]
 end
 
