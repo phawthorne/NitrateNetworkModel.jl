@@ -31,6 +31,9 @@ end
     pEM::Vector{Float64}
     fainN::Vector{Float64}
     fainC::Vector{Float64}
+    # optional values
+    B_gage::Int64 = -1
+    B_us_area::Float64 = -1.0
 end
 
 @with_kw struct ModelVariables

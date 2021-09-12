@@ -63,10 +63,16 @@ to be updated are:
 - `outlet_link`
 - `gage_link`
 - `gage_flow`
+- `B_gage`
+- `B_us_area`
 
 We set `outlet_link` and `gage_link` to link 1.  In order to calculate `gage_flow`, 
 we need to run the original model, and then we have `gage_flow = `model.mv.Q_out[root_node]`,
 where `root_node` is the original link index of the subnetwork outlet. 
+
+The values `B_gage` and `B_us_area` get flow and upstream area from the original
+gage link. They are used to set channel width within the subnetwork, and need to be
+referenced to the original model for consistency of results.
 
 Assumes that the subnetwork network constants file has already been generated
 
@@ -83,6 +89,9 @@ function generate_subnetwork_modelparams_file(
     evaluate!(streammodel)
     gage_flow = streammodel.mv.Q_out[root_node]
 
+    orig_gage_flow = streammodel.nc.gage_flow
+    orig_gage_us_area = streammodel.nc.us_area[streammodel.nc.gage_link]
+
     baseparams = read_baseparams(baseparams_file)
     subnetdf = DataFrame(CSV.File(subnetwork_file))
 
@@ -90,6 +99,8 @@ function generate_subnetwork_modelparams_file(
     baseparams["outlet_link"] = 1
     baseparams["gage_link"] = 1
     baseparams["gage_flow"] = gage_flow
+    baseparams["B_gage"] = orig_gage_flow
+    baseparams["B_us_area"] = orig_gage_us_area
 
     YAML.write_file(subnetwork_params_file, baseparams)
 end
