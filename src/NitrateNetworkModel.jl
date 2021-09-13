@@ -37,16 +37,19 @@ export load_data_from_dir,
 
 include("operators.jl")
 
-include("flow_regime.jl")
+include("FlowRegimes.jl")
 export FlowRegime,
        FlowRegimeSimResults,
        evaluate!,
        weighted_avg_nconc,
        weighted_outlet_nconc,
-       full_eval_flow_regime
+       full_eval_flow_regime,
+       write_flow_regime
 
 include("sample_data.jl")
-export generate_subnetwork_file,
-       generate_subnetwork_modelparams_file
-
+export SubNetworkDef,
+       generate_subnetwork,
+       generate_subnetwork_file,
+       generate_subnetwork_modelparams_file,
+       generate_subnetwork_flowregime_file
 end

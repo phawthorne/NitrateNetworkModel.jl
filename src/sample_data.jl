@@ -1,3 +1,35 @@
+@with_kw struct SubNetworkDef
+    network_file::String
+    baseparams_file::String
+    flow_regime_file::String
+    root_node::Int
+    subnetwork_file::String
+    subnetwork_params_file::String
+    subnetwork_flow_regime_file::Union{Nothing, String}
+end
+
+
+"""
+    generate_subnetwork(subnetworkdef::SubNetworkDef)
+
+Generate files for running the NitrateNetworkModel on a subnetwork of a larger
+network model. 
+
+The final argument, `subnetwork_flow_regime_file` can be `nothing` or a path to a 
+flow regime file. If it points to a file, a corresponding scaled flow regime file
+will be created, or if it is `nothing`, this will be skipped.
+
+All other arguments are required.
+"""
+function generate_subnetwork(subnetworkdef::SubNetworkDef)
+    generate_subnetwork_file(subnetworkdef)
+    generate_subnetwork_modelparams_file(subnetworkdef)
+    if subnetworkdef.subnetwork_flow_regime_file !== nothing
+        generate_subnetwork_flow_regime_file(subnetworkdef)
+    end
+end
+
+
 """
     generate_subnetwork_file(network_file::String, root_node::Int, subnetwork_file::String)
 
@@ -16,6 +48,14 @@ function generate_subnetwork_file(network_file::String, root_node::Int, subnetwo
     subnetdf[!, :to_node] = reindex_to_node(subnetwork_links, subnetdf)
 
     CSV.write(subnetwork_file, subnetdf)
+end
+
+function generate_subnetwork_file(subnetworkdef::SubNetworkDef)
+    generate_subnetwork_file(
+        subnetworkdef.network_file,
+        subnetworkdef.root_node,
+        subnetworkdef.subnetwork_file
+    )
 end
 
 
@@ -105,3 +145,53 @@ function generate_subnetwork_modelparams_file(
     YAML.write_file(subnetwork_params_file, baseparams)
 end
 
+function generate_subnetwork_modelparams_file(subnetworkdef::SubNetworkDef)
+    generate_subnetwork_modelparams_file(
+        subnetworkdef.network_file,
+        subnetworkdef.baseparams_file,
+        subnetworkdef.root_node,
+        subnetworkdef.subnetwork_file,
+        subnetworkdef.subnetwork_params_file
+    )
+end
+
+
+"""
+    generate_subnetwork_flow_regime()
+
+Create `subnetwork_flow_regime_file` by running the base model for each Q value in 
+`flow_regime_file`, and pulling out `Q_out[root_node]`.
+"""
+function generate_subnetwork_flow_regime_file(
+    network_file::String, 
+    baseparams_file::String,
+    flow_regime_file::String, 
+    root_node::Int, 
+    subnetwork_flow_regime_file::String)
+
+    basemodel = StreamModel(baseparams_file, network_file)
+    baseflows = FlowRegime(flow_regime_file)
+
+    nqvals = length(baseflows.q_gage)
+    submodel_qvals = zeros(nqvals)
+    for i in 1:nqvals
+        evaluate!(basemodel, qgage=baseflows.q_gage[i])
+        submodel_qvals[i] = basemodel.mv.Q_out[root_node]
+    end
+
+    submodel_flow_regime = FlowRegime(
+        submodel_qvals, baseflows.p_exceed, baseflows.p_mass
+    )
+
+    write_flow_regime(subnetwork_flow_regime_file, submodel_flow_regime)
+end
+
+function generate_subnetwork_flow_regime_file(subnetworkdef::SubNetworkDef)
+    generate_subnetwork_flow_regime_file(
+        subnetworkdef.network_file,
+        subnetworkdef.baseparams_file,
+        subnetworkdef.flow_regime_file,
+        subnetworkdef.root_node,
+        subnetworkdef.subnetwork_flow_regime_file
+    )
+end
