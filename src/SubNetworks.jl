@@ -1,3 +1,22 @@
+"""
+    SubNetworkDef(
+        network_file::String,
+        baseparams_file::String,
+        flow_regime_file::String,
+        root_node::Int,
+        subnetwork_file::String,
+        subnetwork_params_file::String,
+        subnetwork_flow_regime_file::Union{Nothing, String}
+    )
+
+Parametric struct to pass to `generate_subnetwork`. 
+
+The final argument, `subnetwork_flow_regime_file` can be `nothing` or a path to a 
+flow regime file. If it points to a file, a corresponding scaled flow regime file
+will be created, or if it is `nothing`, this will be skipped.
+
+All other arguments are required.
+"""
 @with_kw struct SubNetworkDef
     network_file::String
     baseparams_file::String
@@ -14,12 +33,6 @@ end
 
 Generate files for running the NitrateNetworkModel on a subnetwork of a larger
 network model. 
-
-The final argument, `subnetwork_flow_regime_file` can be `nothing` or a path to a 
-flow regime file. If it points to a file, a corresponding scaled flow regime file
-will be created, or if it is `nothing`, this will be skipped.
-
-All other arguments are required.
 """
 function generate_subnetwork(subnetworkdef::SubNetworkDef)
     generate_subnetwork_file(subnetworkdef)
@@ -194,4 +207,23 @@ function generate_subnetwork_flow_regime_file(subnetworkdef::SubNetworkDef)
         subnetworkdef.root_node,
         subnetworkdef.subnetwork_flow_regime_file
     )
+end
+
+
+
+"""
+    StreamModel(subnetworkdef::SubNetworkDef)
+Construct a `StreamModel` from a `SubNetworkDef`
+"""
+function StreamModel(subnetworkdef::SubNetworkDef)
+    return StreamModel(subnetworkdef.subnetwork_params_file,
+                       subnetworkdef.subnetwork_file)
+end
+
+"""
+    FlowRegime(subnetworkdef::SubNetworkDef)
+Construct a `FlowRegime` from a `SubNetworkDef`
+"""
+function FlowRegime(subnetworkdef::SubNetworkDef)
+    return FlowRegime(subnetworkdef.subnetwork_flow_regime_file)
 end
