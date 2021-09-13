@@ -72,7 +72,6 @@ function assign_qQ!(model::StreamModel, q_gage::Float64)
     @unpack us_area, contrib_area, routing_order, to_node,
             gage_link, outlet_link = model.nc
 
-    # TODO: this seems like an oversimplification - verify with Jon/MATLAB code
     contrib_q_per_area = q_gage / us_area[gage_link]
 
     for l in routing_order[1:end-1]
@@ -80,30 +79,34 @@ function assign_qQ!(model::StreamModel, q_gage::Float64)
         Q_out[l] = q[l] + Q_in[l]
         Q_in[to_node[l]] += Q_out[l]
     end
+    q[outlet_link] = contrib_q_per_area * contrib_area[outlet_link]
     Q_out[outlet_link] = q[outlet_link] + Q_in[outlet_link]
 end
 
 """
     assign_B!(model::StreamModel)
 
-Calculates average channel width (B)
+Calculates average channel width (B).
+
+Options:
+    - If `model` has an assigned `B_gage` and `B_us_area`, channel widths will
+    be calculated relative to those values. Otherwise, channel widths will be
+    calculated relative to `Q_out[gage_link]` and `us_area[gage_link]`.
 """
 function assign_B!(model::StreamModel)
     @unpack Qbf, a1, a2, b1, b2 = model.mc
-    @unpack gage_link, us_area = model.nc
+    @unpack gage_link, us_area, B_gage, B_us_area = model.nc
     @unpack B, Q_out = model.mv
 
-    if Q_out[gage_link] < Qbf
-        B_ref = a1 * Q_out[gage_link] ^ b1
-    else
-        B_ref = a2 * Q_out[gage_link] ^ b2
-    end
+    # Get reference flow and upstream area
+    Q_ref = B_gage > 0 ? B_gage : Q_out[gage_link]
+    us_area_ref = B_us_area > 0 ? B_us_area : us_area[gage_link]
 
-    tmp = (B_ref/sqrt(us_area[gage_link])) * sqrt.(us_area)
+    # Apply flow-based scaling function to calculate reference width
+    B_ref = Q_ref < Qbf ? a1 * Q_ref ^ b1 : a2 * Q_ref ^ b2
 
-    for i in 1:length(B)
-        @inbounds B[i] = tmp[i]
-    end
+    # Apply area-based scaling over the network
+    @. B = (B_ref/sqrt(us_area_ref)) * sqrt(us_area)
 end
 
 """

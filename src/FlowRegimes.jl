@@ -109,3 +109,19 @@ function full_eval_flow_regime(model::StreamModel, flowregime::FlowRegime)
     
     return results
 end
+
+"Write `flowregime` to CSV file `output_file`"
+function write_flow_regime(output_file, flowregime::FlowRegime;
+               q_gage_col="Q", p_exceed_col="cp", p_mass_col="cf")
+    nflows = length(flowregime.q_gage)
+
+    open(output_file, "w") do io
+        write(io, "$(q_gage_col),$(p_exceed_col),$(p_mass_col)\n")
+        for i=1:nflows
+            q = flowregime.q_gage[i]
+            cp = flowregime.p_exceed[i]
+            cf = flowregime.p_mass[i]
+            write(io, "$(q),$(cp),$(cf)\n")
+        end
+    end
+end

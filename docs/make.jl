@@ -9,7 +9,8 @@ makedocs(
     pages = [
         "Home" => "index.md",
         "Basic Model" => "nnm.md",
-        "Flow Regime" => "flow_regime.md"
+        "Flow Regime" => "flow_regime.md",
+        "Subnetworks" => "sub_networks.md"
     ]
 )
 
