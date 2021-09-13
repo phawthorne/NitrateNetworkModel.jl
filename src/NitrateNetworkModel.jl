@@ -46,7 +46,7 @@ export FlowRegime,
        full_eval_flow_regime,
        write_flow_regime
 
-include("sample_data.jl")
+include("SubNetworks.jl")
 export SubNetworkDef,
        generate_subnetwork,
        generate_subnetwork_file,
