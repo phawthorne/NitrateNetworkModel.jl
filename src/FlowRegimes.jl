@@ -55,7 +55,7 @@ Runs `stream_model.evaluate!(model, q)` for each q in `flowregime.q_gage.` Outle
 and average concentrations are saved to a `FlowRegimeSimResults` struct and
 returned.
 """
-function evaluate!(model::StreamModel, flowregime::FlowRegime)
+function evaluate!(model::StreamModel, flowregime::FlowRegime; contrib_n_load_reduction=nothing)
     nqvals = length(flowregime.q_gage)
     results = FlowRegimeSimResults(
         fill(0.0, nqvals),
@@ -64,7 +64,7 @@ function evaluate!(model::StreamModel, flowregime::FlowRegime)
     )
 
     for i in 1:nqvals
-        evaluate!(model, qgage=flowregime.q_gage[i])
+        evaluate!(model, qgage=flowregime.q_gage[i], contrib_n_load_reduction=contrib_n_load_reduction)
         results.n_conc_outlet[i] = get_outlet_nconc(model)
         results.n_conc_avg[i] = get_avg_nconc(model)
     end
