@@ -2,28 +2,30 @@
     SubNetworkDef(
         network_file::String,
         baseparams_file::String,
-        flow_regime_file::String,
         root_node::Int,
         subnetwork_file::String,
         subnetwork_params_file::String,
+        flow_regime_file::Union{Nothing, String},
         subnetwork_flow_regime_file::Union{Nothing, String}
     )
 
 Parametric struct to pass to `generate_subnetwork`. 
 
-The final argument, `subnetwork_flow_regime_file` can be `nothing` or a path to a 
-flow regime file. If it points to a file, a corresponding scaled flow regime file
-will be created, or if it is `nothing`, this will be skipped.
+The final two arguments, `flow_regime_file` and `subnetwork_flow_regime_file` can be `nothing` 
+or point to an existing flow regime file and the location to create the corresponding
+flow regime file for the subnetwork. If either one is `nothing`, then this step will be
+skipped, or if both are provided, the subnetwork flow regime file will be calculated and
+created.
 
 All other arguments are required.
 """
 @with_kw struct SubNetworkDef
     network_file::String
     baseparams_file::String
-    flow_regime_file::String
     root_node::Int
     subnetwork_file::String
     subnetwork_params_file::String
+    flow_regime_file::Union{Nothing, String}
     subnetwork_flow_regime_file::Union{Nothing, String}
 end
 
@@ -37,7 +39,8 @@ network model.
 function generate_subnetwork(subnetworkdef::SubNetworkDef)
     generate_subnetwork_file(subnetworkdef)
     generate_subnetwork_modelparams_file(subnetworkdef)
-    if subnetworkdef.subnetwork_flow_regime_file !== nothing
+    if (subnetworkdef.subnetwork_flow_regime_file !== nothing &&
+        subnetworkdef.flow_regime_file !== nothing)
         generate_subnetwork_flow_regime_file(subnetworkdef)
     end
 end
