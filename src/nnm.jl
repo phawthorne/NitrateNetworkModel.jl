@@ -99,6 +99,7 @@ function assign_B!(model::StreamModel)
     @unpack B, Q_out = model.mv
 
     # Get reference flow and upstream area
+    # If the values from `model.nc` are > 0 use these, otherwise refer to values at `gage_link`
     Q_ref = B_gage > 0 ? B_gage : Q_out[gage_link]
     us_area_ref = B_us_area > 0 ? B_us_area : us_area[gage_link]
 

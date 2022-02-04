@@ -215,18 +215,46 @@ end
 
 
 """
-    StreamModel(subnetworkdef::SubNetworkDef)
-Construct a `StreamModel` from a `SubNetworkDef`
+    StreamModel(subnetworkdef::SubNetworkDef; make_if_missing::Bool=true)
+
+Construct a `StreamModel` from a `SubNetworkDef`. If the subnetwork hasn't been
+created yet and `make_if_missing` is `true` (default), this will also generate the
+subnetwork files. If `make_if_missing` is set to `false`, throws an error if the
+subnetwork doesn't exist.
 """
-function StreamModel(subnetworkdef::SubNetworkDef)
+function StreamModel(subnetworkdef::SubNetworkDef; make_if_missing::Bool=true)
+    if (~(Base.Filesystem.isfile(subnetworkdef.subnetwork_params_file) &&
+          Base.Filesystem.isfile(subnetworkdef.subnetwork_file)))
+        if make_if_missing
+            generate_subnetwork(subnetworkdef)
+        else
+            error("Subnetwork not found and make_if_missing is False")
+        end
+    end
+    
     return StreamModel(subnetworkdef.subnetwork_params_file,
                        subnetworkdef.subnetwork_file)
 end
 
 """
-    FlowRegime(subnetworkdef::SubNetworkDef)
-Construct a `FlowRegime` from a `SubNetworkDef`
+    FlowRegime(subnetworkdef::SubNetworkDef; make_if_missing::Bool=true)
+
+Construct a `FlowRegime` from a `SubNetworkDef`. If the subnetwork and flow regime 
+haven't been created yet and `make_if_missing` is `true` (default), this will also 
+generate the required files. If `make_if_missing` is set to `false`, throws an error 
+if the subnetwork files don't exist.
 """
-function FlowRegime(subnetworkdef::SubNetworkDef)
+function FlowRegime(subnetworkdef::SubNetworkDef; make_if_missing::Bool=true)
+    if (~(Base.Filesystem.isfile(subnetworkdef.subnetwork_params_file) &&
+          Base.Filesystem.isfile(subnetworkdef.subnetwork_file) &&
+          Base.Filesystem.isfile(subnetworkdef.subnetwork_flow_regime_file)))
+        if make_if_missing
+            generate_subnetwork(subnetworkdef)
+            generate_subnetwork_flow_regime_file(subnetworkdef)
+        else
+            error("Subnetwork and/or subnetwork flow regime not found and make_if_missing is False")
+        end
+    end
+
     return FlowRegime(subnetworkdef.subnetwork_flow_regime_file)
 end
