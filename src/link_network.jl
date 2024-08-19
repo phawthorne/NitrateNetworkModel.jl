@@ -14,25 +14,27 @@ end
 
 
 """
-    LinkNetwork(connection_list::Array{T, 1} where T<:Integer)
+    LinkNetwork(downstream_connections::Array{T, 1} where T<:Integer) -> LinkNetwork
 
-`connection_list` defines downstream connections: `connection_list[i] == j` means that link `i`
-flows into link `j`. If `connection_list[i] == -1`, that means `i` is the outlet.
+LinkNetwork constructor function that takes an array of link indices, where the value at each slot
+in the array is the index of the link it flows into. If the value is -1, that means the link is the
+outlet. I.e. `downstream_connections[i] == j` means that link `i` flows into link `j`. If
+`downstream_connections[i] == -1`, that means `i` is the outlet.
 
 Return a `LinkNetwork`
 """
-function LinkNetwork(connection_list::Array{T, 1} where T<:Integer)
-    T = typeof(connection_list[1])
+function LinkNetwork(downstream_connections::Array{T, 1} where T<:Integer)
+    T = typeof(downstream_connections[1])
     up = Dict{T, Array{T, 1}}()
     down = Dict{T, Array{T, 1}}()
 
-    n_nodes = length(connection_list)
+    n_nodes = length(downstream_connections)
     for n in 1:n_nodes
         up[n] = []
         down[n] = []
     end
 
-    for (up_node, down_node) in enumerate(connection_list)
+    for (up_node, down_node) in enumerate(downstream_connections)
         if down_node == -1
             continue
         end

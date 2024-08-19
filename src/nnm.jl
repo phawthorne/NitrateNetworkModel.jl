@@ -230,7 +230,7 @@ function get_outlet_nconc(model::StreamModel)
 end
 
 """
-    get_avg_nconc(model::StreamModel)::Float64
+    get_average_nconc(model::StreamModel)::Float64
 
 Gets link length-weighted nitrate concentration
 """

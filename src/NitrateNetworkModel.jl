@@ -11,10 +11,11 @@ include("link_network.jl")
 export LinkNetwork, calc_routing_depth, get_routing_order,
        get_headwater_links
 
-include("StreamModels.jl")
+include("stream_model.jl")
 export StreamModel, ModelConstants, NetworkConstants, ModelVariables
 
 include("nnm.jl")
+
 include("nnm_io.jl")
 export ModelConstants,
        NetworkConstants,
@@ -35,9 +36,7 @@ export load_data_from_dir,
        build_network,
        save_model_variables
 
-include("operators.jl")
-
-include("FlowRegimes.jl")
+include("flow_regime.jl")
 export FlowRegime,
        FlowRegimeSimResults,
        evaluate!,
@@ -46,7 +45,7 @@ export FlowRegime,
        full_eval_flow_regime,
        write_flow_regime
 
-include("SubNetworks.jl")
+include("subnetwork.jl")
 export SubNetworkDef,
        generate_subnetwork,
        generate_subnetwork_file,

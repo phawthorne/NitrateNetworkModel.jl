@@ -1,3 +1,6 @@
+using Pkg
+Pkg.activate("..")
+
 using Documenter, NitrateNetworkModel
 
 push!(LOAD_PATH, "../src/")
@@ -10,8 +13,10 @@ makedocs(
         "Home" => "index.md",
         "Basic Model" => "nnm.md",
         "Flow Regime" => "flow_regime.md",
-        "Subnetworks" => "sub_networks.md"
-    ]
+        "Subnetworks" => "subnetwork.md",
+        "LinkNetwork" => "link_network.md",
+    ],
+    warnonly = true
 )
 
 deploydocs(
