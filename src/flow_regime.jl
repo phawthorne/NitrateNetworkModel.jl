@@ -82,14 +82,22 @@ function weighted_outlet_nconc(results::FlowRegimeSimResults)
     return sum(results.n_conc_outlet .* results.p_mass)
 end
 
+"""
+    weighted_average_nconc(results::FlowRegimeSimResults)
+
+Convenience function for getting probability exceedance weighted average concentration.
+"""
+function weighted_average_nconc(results::FlowRegimeSimResults)
+    return sum(results.n_conc_avg .* results.p_mass)
+end
 
 """
     weighted_avg_nconc(results::FlowRegimeSimResults)
 
-Convenience function for getting probability exceedance weighted average concentration.
+Alias for `weighted_average_nconc`.
 """
 function weighted_avg_nconc(results::FlowRegimeSimResults)
-    return sum(results.n_conc_avg .* results.p_mass)
+    return weighted_average_nconc(results)
 end
 
 
