@@ -2,5 +2,5 @@
 docs/build/
 .vscode/
 *.code-workspace
-data/*
+data/LeSueur/results/*
 archive/*

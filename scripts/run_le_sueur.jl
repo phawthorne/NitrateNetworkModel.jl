@@ -4,11 +4,15 @@ using NitrateNetworkModel
 
 
 workspace = "../data/LeSueur"
-inputpath(basename) = joinpath(workspace, "inputs", "LeSueurNetworkData", basename)
+inputpath(basename) = joinpath(workspace, "inputs", basename)
 resultpath(basename) = joinpath(workspace, "results", basename)
 
 
 function main()
+    if !isdir(joinpath(workspace, "results"))
+        mkpath(joinpath(workspace, "results"))
+    end
+    
     sm = StreamModel(
         inputpath("base_params.csv"), 
         inputpath("network_table.csv")

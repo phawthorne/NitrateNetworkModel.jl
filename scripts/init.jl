@@ -1,3 +1,7 @@
+# This script is deprecated and will be removed in the future. The data is now included in the
+# github repository and the cyverse data is no longer maintained. The network table in the linked
+# data is incorrect.
+
 using Pkg
 Pkg.activate("..")
 Pkg.instantiate()
@@ -8,7 +12,7 @@ import Base.Filesystem.isdir
 import Base.Filesystem.mkpath
 
 
-workspace = "../data/LeSueur"
+workspace = "../data/example"
 inputs_dir = joinpath(workspace, "inputs")
 results_dir = joinpath(workspace, "results")
 
@@ -36,6 +40,7 @@ function download_data()
     # download input data
     target_file = joinpath(inputs_dir, "LeSueurNetworkData.zip")
     Base.download(input_data_url, target_file)
+    warn("NOTE: this data was created before the wetland codes 2 and 3 were swapped. The network table is not correct.")
     Base.run(`unzip $target_file "LeSueurNetworkData*" -d $inputs_dir`)
     Base.Filesystem.rm(target_file)
 end
